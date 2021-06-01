@@ -1,7 +1,10 @@
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.Scanner;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.PrintWriter;
 
 public class MultiConstKnapsack {
     static Item[] items;
@@ -9,46 +12,33 @@ public class MultiConstKnapsack {
     static int[] capacities;
     static int knapCount, itemCount;
 
-    public static void main(String[] args) throws FileNotFoundException {
+    public static void main(String[] args) throws IOException {
 
         readFile("inputs/sample1.txt");
-//        for (int i = 0; i < capacities.length; i++) {
-//            for (Item item : items) System.out.println(item.toString());
+        writeFile("outputs/output1.txt");
+
+//        long startTime = System.nanoTime();
+//        int[] weights = new int[knapCount];
+//        int allSum = SubsetSums(items);
+//        System.out.println(allSum);
+//        int sum = 0;
+//        for (int i = 0; i < itemCount; i++){
+//            if(knapsack[i] == null){
+//                System.out.println(0);
+//            }
+//            else {
+//                System.out.println(1);
+//                for(int j = 0; j < knapCount; j++){
+//                    weights[j] += knapsack[i].GetWeightsElement(j);
+//                }
+//                sum += knapsack[i].GetValue();
+//            }
 //        }
-        long startTime = System.nanoTime();
-
-        int w1 = 0, w2 = 0;
-        int allSum = SubsetSums(items);
-        System.out.println(allSum);
-        int sum = 0;
-        for (int i = 0; i < itemCount; i++){
-            if(knapsack[i] == null){
-                System.out.println(0);
-            }
-            else {
-                System.out.println(1);
-                w1 += knapsack[i].GetWeightsElement(0);
-                w2 += knapsack[i].GetWeightsElement(1);
-                sum += knapsack[i].GetValue();
-            }
-        }
-        System.out.println("The real sum: " + sum);
-
-        System.out.println(w1 + "\n" + w2);
-
-        long endTime = System.nanoTime();
-        long timeApproval = endTime - startTime;
-        System.out.println("time elapsed  : " + timeApproval / 1000000);
-
-//        readFile("inputs/sample2.txt");
-//        for (int i = 0; i < capacities.length; i++) {
-//            for (Item item : items) System.out.println(item.toString());
-//        }
-//
-//        readFile("inputs/sample3.txt");
-//        for (int i = 0; i < capacities.length; i++) {
-//            for (Item item : items) System.out.println(item.toString());
-//        }
+//        System.out.println("The real sum: " + sum);
+//        System.out.println(Arrays.toString(weights));
+//        long endTime = System.nanoTime();
+//        long timeApproval = endTime - startTime;
+//        System.out.println("time elapsed  : " + timeApproval / 1000000);
     }
 
     private static void readFile(String fileName) throws FileNotFoundException {
@@ -77,6 +67,21 @@ public class MultiConstKnapsack {
         sc.close();
     }
 
+    private static void writeFile(String fileName) throws IOException {
+        FileWriter fileWriter = new FileWriter(fileName);
+        PrintWriter printWriter = new PrintWriter(fileWriter);
+        int allSum = SubsetSums(items);
+        printWriter.println(allSum);
+        for (int i = 0; i < itemCount; i++) {
+            if (knapsack[i] == null) {
+                printWriter.println(0);
+            } else {
+                printWriter.println(1);
+            }
+        }
+        printWriter.close();
+    }
+
     private static int SubsetSums(Item[] arr) {
         int total = 1 << itemCount;
         int max = Integer.MIN_VALUE;
@@ -101,26 +106,20 @@ public class MultiConstKnapsack {
             for (int m = 0; m < knapCount; m++) {
                 if (capacities[m] < itemWeights[m]) {
                     sum = 0;
-                    NullifyItems(tempKnapsack);
+                    Arrays.fill(tempKnapsack, null);
                     break;
                 }
             }
 
-            Arrays.fill(itemWeights,0);
+            Arrays.fill(itemWeights, 0);
 
             if (sum > max) {
                 max = sum;
-                NullifyItems(knapsack);
+                Arrays.fill(knapsack, null);
                 knapsack = tempKnapsack.clone();
             }
-            NullifyItems(tempKnapsack);
+            Arrays.fill(tempKnapsack, null);
         }
         return max;
-    }
-
-    private static void NullifyItems(Item[] items) {
-        for (int n = 0; n < items.length; n++) {
-            items[n] = null;
-        }
     }
 }
