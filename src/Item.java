@@ -29,9 +29,12 @@ public class Item {
     public int GetKnapCount() {
         return knapCount;
     }
-
     public int[] GetWeights() {
         return weights;
+    }
+
+    public int GetWeightsElement(int index) {
+        return weights[index];
     }
 
     @Override
