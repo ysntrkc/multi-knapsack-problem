@@ -14,31 +14,20 @@ public class MultiConstKnapsack {
 
     public static void main(String[] args) throws IOException {
 
-        readFile("inputs/sample1.txt");
-        writeFile("outputs/output1.txt");
+        readFile("inputs/sample3.txt");
+        Arrays.sort(items);
+        System.out.println(Arrays.toString(items));
+
+        //todo
+        // add one by one from items array to the knapsack and each time compare the capacities
+        // if exceeds capacity remove that item and go on with other items
+        // if not go on adding other items.
 
 //        long startTime = System.nanoTime();
-//        int[] weights = new int[knapCount];
-//        int allSum = SubsetSums(items);
-//        System.out.println(allSum);
-//        int sum = 0;
-//        for (int i = 0; i < itemCount; i++){
-//            if(knapsack[i] == null){
-//                System.out.println(0);
-//            }
-//            else {
-//                System.out.println(1);
-//                for(int j = 0; j < knapCount; j++){
-//                    weights[j] += knapsack[i].GetWeightsElement(j);
-//                }
-//                sum += knapsack[i].GetValue();
-//            }
-//        }
-//        System.out.println("The real sum: " + sum);
-//        System.out.println(Arrays.toString(weights));
-//        long endTime = System.nanoTime();
-//        long timeApproval = endTime - startTime;
-//        System.out.println("time elapsed  : " + timeApproval / 1000000);
+//        writeFile("outputs/output1.txt");
+//         long endTime = System.nanoTime();
+//         long timeApproval = endTime - startTime;
+//         System.out.println("time elapsed  : " + timeApproval / 1000000);
     }
 
     private static void readFile(String fileName) throws FileNotFoundException {
@@ -70,8 +59,8 @@ public class MultiConstKnapsack {
     private static void writeFile(String fileName) throws IOException {
         FileWriter fileWriter = new FileWriter(fileName);
         PrintWriter printWriter = new PrintWriter(fileWriter);
-        int allSum = SubsetSums(items);
-        printWriter.println(allSum);
+        // calculate value sum
+        // printWriter.println(allSum);
         for (int i = 0; i < itemCount; i++) {
             if (knapsack[i] == null) {
                 printWriter.println(0);
@@ -80,46 +69,5 @@ public class MultiConstKnapsack {
             }
         }
         printWriter.close();
-    }
-
-    private static int SubsetSums(Item[] arr) {
-        int total = 1 << itemCount;
-        int max = Integer.MIN_VALUE;
-
-        knapsack = new Item[itemCount];
-        Item[] tempKnapsack = new Item[itemCount];
-
-        int[] itemWeights = new int[knapCount];
-
-        for (int i = 0; i < total; i++) {
-            int sum = 0;
-            for (int j = 0; j < itemCount; j++) {
-                if ((i & (1 << j)) != 0) {
-                    sum += arr[j].GetValue();
-                    for (int k = 0; k < knapCount; k++) {
-                        itemWeights[k] += arr[j].GetWeightsElement(k);
-                    }
-                    tempKnapsack[j] = arr[j];
-                }
-            }
-
-            for (int m = 0; m < knapCount; m++) {
-                if (capacities[m] < itemWeights[m]) {
-                    sum = 0;
-                    Arrays.fill(tempKnapsack, null);
-                    break;
-                }
-            }
-
-            Arrays.fill(itemWeights, 0);
-
-            if (sum > max) {
-                max = sum;
-                Arrays.fill(knapsack, null);
-                knapsack = tempKnapsack.clone();
-            }
-            Arrays.fill(tempKnapsack, null);
-        }
-        return max;
     }
 }
