@@ -7,38 +7,36 @@ import java.io.FileWriter;
 import java.io.PrintWriter;
 
 public class MultiConstKnapsack {
-    static Item[] items;
-    static int[] knapsack;
-    static int[] capacities;
-    static int[] weightSum;
+    static Item[] items; //To hold all items
+    static int[] knapsack; //To hold the existence state of each item.
+    static int[] capacities; //To hold the capacities of each constraint.
+    static int[] weightSum; //To hold each constraint's total weight.
     static int knapCount, itemCount;
 
     public static void main(String[] args) throws IOException {
-        readFile("inputs/sample1.txt");
-        Arrays.sort(items);
+        int totalValue = 0;
+        readFile("inputs/sample1.txt");                     //Read file
+        Arrays.sort(items);                                         //Sort by each average ratio.
+        totalValue = fillKnapsack();                                //Fill the hypothetical knapsack.
+        writeFile("outputs/output1.txt", totalValue);       //Write to an output file.
 
-        int totalValue = fillKnapsack();
-        writeFile("outputs/output1.txt", totalValue);
 
-
-//        readFile("inputs/sample2.txt");
-//        Arrays.sort(items);
-//
-//        int totalValue2 = fillKnapsack();
-//        writeFile("outputs/output2.txt", totalValue2);
-//
-//
-//        readFile("inputs/sample3.txt");
-//        Arrays.sort(items);
-//
-//        int totalValue3 = fillKnapsack();
-//        writeFile("outputs/output3.txt", totalValue3);
+ //     readFile("inputs/sample2.txt");                     //Read file
+ //     Arrays.sort(items);                                         //Sort by each average ratio.
+ //     totalValue = fillKnapsack();                            //Fill the hypothetical knapsack.
+ //     writeFile("outputs/output1.txt", totalValue);       //Write to an output file.
+ //
+ //
+ //     readFile("inputs/sample3.txt");                     //Read file
+ //     Arrays.sort(items);                                         //Sort by each average ratio.
+ //     totalValue = fillKnapsack();                            //Fill the hypothetical knapsack.
+ //     writeFile("outputs/output3.txt", totalValue);       //Write to an output file.
     }
-
+    //Fill knapsack hypothetically, in reality function fills a zero-one array for each item in the hypothetical knapsack.
     private static int fillKnapsack() {
 
         int totalValue = 0;
-        boolean control = false;
+        boolean control = false; //controls the availability state
         weightSum = new int[knapCount];
         knapsack = new int[itemCount];
 
@@ -58,31 +56,36 @@ public class MultiConstKnapsack {
                 for (int j = 0; j < knapCount; j++) {
                     weightSum[j] += items[i].GetWeightsElement(j);
                 }
-                totalValue += items[i].GetValue();
-                knapsack[items[i].GetID()] = 1;
+                totalValue += items[i].GetValue(); //sum up each value
+                knapsack[items[i].GetID()] = 1; //add it to the knapsack
             }
         }
 
         return totalValue;
     }
 
+    //Reads that according to the input format.
     private static void readFile(String fileName) throws FileNotFoundException {
         File inputFile = new File(fileName);
         Scanner sc = new Scanner(inputFile);
 
-        knapCount = sc.nextInt();
-        itemCount = sc.nextInt();
+        knapCount = sc.nextInt(); //constraint count
+        itemCount = sc.nextInt(); //number of items
         items = new Item[itemCount];
         capacities = new int[knapCount];
+
+        //Get the value and create an object with those values.
         for (int i = 0; i < itemCount; i++) {
             int value = sc.nextInt();
             Item currentItem = new Item(value, knapCount);
             items[i] = currentItem;
         }
 
+        //Get the capacities of each constraint.
         for (int i = 0; i < knapCount; i++)
             capacities[i] = sc.nextInt();
 
+        //Get and set each weight onto that item.
         for (int j = 0; j < knapCount; j++) {
             for (int i = 0; i < itemCount; i++) {
                 int weight = sc.nextInt();
@@ -92,13 +95,14 @@ public class MultiConstKnapsack {
         sc.close();
     }
 
+    //Write to file
     private static void writeFile(String fileName, int totalValue) throws IOException {
         FileWriter fileWriter = new FileWriter(fileName);
         PrintWriter printWriter = new PrintWriter(fileWriter);
 
-        printWriter.println(totalValue);
+        printWriter.println(totalValue); //First print total value.
 
-        for (int i = 0; i < itemCount; i++) {
+        for (int i = 0; i < itemCount; i++) { //Print the zero-one array.
             printWriter.println(knapsack[i]);
         }
         printWriter.close();
