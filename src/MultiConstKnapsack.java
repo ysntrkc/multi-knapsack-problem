@@ -10,24 +10,47 @@ public class MultiConstKnapsack {
     static Item[] items;
     static Item[] knapsack;
     static int[] capacities;
+    static int[] weightSum;
+    static int[] idArr;
     static int knapCount, itemCount;
 
     public static void main(String[] args) throws IOException {
 
         readFile("inputs/sample3.txt");
         Arrays.sort(items);
-        System.out.println(Arrays.toString(items));
 
         //todo
         // add one by one from items array to the knapsack and each time compare the capacities
         // if exceeds capacity remove that item and go on with other items
+        // should add weight sum array.
         // if not go on adding other items.
 
-//        long startTime = System.nanoTime();
-//        writeFile("outputs/output1.txt");
-//         long endTime = System.nanoTime();
-//         long timeApproval = endTime - startTime;
-//         System.out.println("time elapsed  : " + timeApproval / 1000000);
+        int totalValue = fillKnapsack();
+        writeFile("outputs/output3.txt",totalValue);
+    }
+
+    private static int fillKnapsack() {
+        int totalValue = 0;
+        boolean control = false;
+        weightSum = new int[knapCount];
+        idArr = new int [itemCount];
+        knapsack = new Item[itemCount];
+        for (int i = 0; i < itemCount; i++) {
+            for(int j = 0; j < knapCount; j++){
+                control = capacities[j] >= (weightSum[j] + items[i].GetWeightsElement(j));
+            }
+            //add to knapsack according to the boolean value
+            if(control){
+                knapsack[i] = items[i];
+                for(int j = 0; j < knapCount; j++){
+                    weightSum[j] += items[i].GetWeightsElement(j);
+                }
+                totalValue += items[i].GetValue();
+                idArr[items[i].GetID()] = 1;
+            }
+        }
+
+        return totalValue;
     }
 
     private static void readFile(String fileName) throws FileNotFoundException {
@@ -56,17 +79,15 @@ public class MultiConstKnapsack {
         sc.close();
     }
 
-    private static void writeFile(String fileName) throws IOException {
+    private static void writeFile(String fileName, int totalValue) throws IOException {
         FileWriter fileWriter = new FileWriter(fileName);
         PrintWriter printWriter = new PrintWriter(fileWriter);
-        // calculate value sum
-        // printWriter.println(allSum);
+
+        printWriter.println(totalValue);
+        //todo check here later
+
         for (int i = 0; i < itemCount; i++) {
-            if (knapsack[i] == null) {
-                printWriter.println(0);
-            } else {
-                printWriter.println(1);
-            }
+            printWriter.println(idArr[i]);
         }
         printWriter.close();
     }

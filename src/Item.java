@@ -1,38 +1,43 @@
 import java.util.Arrays;
 
 public class Item implements Comparable<Item> {
-    private final static double EPSILON = 0.000001;
 
-    private final int value;
-    private final int knapCount;
+    private final static double EPSILON = 0.000001;
+    private final int VALUE;
+    private final int KNAPCOUNT;
+    private final int ID;
+    private final int[] WEIGHTS;
+
+    private static int idCounter;
+
     private float avgRatio;
-    private final int[] weights;
     private int index;
 
     public Item(int value, int knapCount) {
-        this.value = value;
-        this.knapCount = knapCount;
-        weights = new int[knapCount];
-        index = 0;
+        VALUE = value;
+        KNAPCOUNT = knapCount;
+        WEIGHTS = new int[knapCount];
+        ID = idCounter;
+        idCounter++;
     }
 
     public void SetWeights(int weight) {
-        if (index == knapCount)
+        if (index == KNAPCOUNT)
             return;
 
-        weights[index] = weight;
+        WEIGHTS[index] = weight;
         index++;
-        if(index == knapCount) {
+        if(index == KNAPCOUNT) {
             SetAvgRatio();
         }
     }
 
     public void SetAvgRatio() {
         int weightSum = 0;
-        for (int i = 0; i < knapCount; i++){
-            weightSum += weights[i];
+        for (int i = 0; i < KNAPCOUNT; i++){
+            weightSum += WEIGHTS[i];
         }
-        avgRatio = (float) value / weightSum;
+        avgRatio = (float) VALUE / weightSum;
     }
 
     public float GetAvgRatio(){
@@ -40,19 +45,23 @@ public class Item implements Comparable<Item> {
     }
 
     public int GetValue() {
-        return value;
+        return VALUE;
     }
 
     public int GetKnapCount() {
-        return knapCount;
+        return KNAPCOUNT;
+    }
+
+    public int GetID() {
+        return ID;
     }
 
     public int[] GetWeights() {
-        return weights;
+        return WEIGHTS;
     }
 
     public int GetWeightsElement(int index) {
-        return weights[index];
+        return WEIGHTS[index];
     }
 
 
@@ -69,9 +78,10 @@ public class Item implements Comparable<Item> {
     @Override
     public String toString() {
         return "Item{" +
-                "value=" + value +
+                "VALUE=" + VALUE +
+                ", WEIGHTS=" + Arrays.toString(WEIGHTS) +
+                ", id=" + ID +
                 ", avgRatio=" + avgRatio +
-                ", weights=" + Arrays.toString(weights) +
                 "}\n";
     }
 }
