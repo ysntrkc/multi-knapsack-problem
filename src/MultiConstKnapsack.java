@@ -8,45 +8,58 @@ import java.io.PrintWriter;
 
 public class MultiConstKnapsack {
     static Item[] items;
-    static Item[] knapsack;
+    static int[] knapsack;
     static int[] capacities;
     static int[] weightSum;
-    static int[] idArr;
     static int knapCount, itemCount;
 
     public static void main(String[] args) throws IOException {
-
-        readFile("inputs/sample3.txt");
+        readFile("inputs/sample1.txt");
         Arrays.sort(items);
 
-        //todo
-        // add one by one from items array to the knapsack and each time compare the capacities
-        // if exceeds capacity remove that item and go on with other items
-        // should add weight sum array.
-        // if not go on adding other items.
-
         int totalValue = fillKnapsack();
-        writeFile("outputs/output3.txt",totalValue);
+        writeFile("outputs/output1.txt", totalValue);
+
+
+//        readFile("inputs/sample2.txt");
+//        Arrays.sort(items);
+//
+//        int totalValue2 = fillKnapsack();
+//        writeFile("outputs/output2.txt", totalValue2);
+//
+//
+//        readFile("inputs/sample3.txt");
+//        Arrays.sort(items);
+//
+//        int totalValue3 = fillKnapsack();
+//        writeFile("outputs/output3.txt", totalValue3);
     }
 
     private static int fillKnapsack() {
+
         int totalValue = 0;
         boolean control = false;
         weightSum = new int[knapCount];
-        idArr = new int [itemCount];
-        knapsack = new Item[itemCount];
+        knapsack = new int[itemCount];
+
+        // Add one by one from items array to the knapsack and each time compare the capacities
         for (int i = 0; i < itemCount; i++) {
-            for(int j = 0; j < knapCount; j++){
+            for (int j = 0; j < knapCount; j++) {
+
+                // If exceeds capacity don't add that item and go on with other items
                 control = capacities[j] >= (weightSum[j] + items[i].GetWeightsElement(j));
+
+                // If not go on adding other items
+                if (!control)
+                    break;
             }
-            //add to knapsack according to the boolean value
-            if(control){
-                knapsack[i] = items[i];
-                for(int j = 0; j < knapCount; j++){
+            //Add to knapsack according to the control boolean
+            if (control) {
+                for (int j = 0; j < knapCount; j++) {
                     weightSum[j] += items[i].GetWeightsElement(j);
                 }
                 totalValue += items[i].GetValue();
-                idArr[items[i].GetID()] = 1;
+                knapsack[items[i].GetID()] = 1;
             }
         }
 
@@ -87,7 +100,7 @@ public class MultiConstKnapsack {
         //todo check here later
 
         for (int i = 0; i < itemCount; i++) {
-            printWriter.println(idArr[i]);
+            printWriter.println(knapsack[i]);
         }
         printWriter.close();
     }
