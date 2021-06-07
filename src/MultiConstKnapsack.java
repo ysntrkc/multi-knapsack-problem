@@ -97,7 +97,6 @@ public class MultiConstKnapsack {
         PrintWriter printWriter = new PrintWriter(fileWriter);
 
         printWriter.println(totalValue);
-        //todo check here later
 
         for (int i = 0; i < itemCount; i++) {
             printWriter.println(knapsack[i]);
