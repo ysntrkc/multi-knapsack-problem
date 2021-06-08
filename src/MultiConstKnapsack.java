@@ -13,25 +13,29 @@ public class MultiConstKnapsack {
     static int[] weightSum; //To hold each constraint's total weight.
     static int knapCount, itemCount;
 
+    static String inputText, outputText;
+
     public static void main(String[] args) throws IOException {
         int totalValue = 0;
-        readFile("inputs/sample1.txt");                     //Read file
-        Arrays.sort(items);                                         //Sort by each average ratio.
-        totalValue = fillKnapsack();                                //Fill the hypothetical knapsack.
-        writeFile("outputs/output1.txt", totalValue);       //Write to an output file.
 
+        TakeUserInput();                            //Take input
+        readFile(inputText);                        //Read file
+        Arrays.sort(items);                         //Sort by each average ratio.
+        totalValue = fillKnapsack();                //Fill the hypothetical knapsack.
+        writeFile(outputText , totalValue);         //Write to an output file.
 
- //     readFile("inputs/sample2.txt");                     //Read file
- //     Arrays.sort(items);                                         //Sort by each average ratio.
- //     totalValue = fillKnapsack();                            //Fill the hypothetical knapsack.
- //     writeFile("outputs/output1.txt", totalValue);       //Write to an output file.
- //
- //
- //     readFile("inputs/sample3.txt");                     //Read file
- //     Arrays.sort(items);                                         //Sort by each average ratio.
- //     totalValue = fillKnapsack();                            //Fill the hypothetical knapsack.
- //     writeFile("outputs/output3.txt", totalValue);       //Write to an output file.
     }
+
+    private static void TakeUserInput() {
+        Scanner input = new Scanner(System.in);
+
+        System.out.print("Enter your input file name: ");
+        inputText = input.next();
+
+        System.out.print("\nEnter your output file name: ");
+        outputText = input.next();
+    }
+
     //Fill knapsack hypothetically, in reality function fills a zero-one array for each item in the hypothetical knapsack.
     private static int fillKnapsack() {
 
