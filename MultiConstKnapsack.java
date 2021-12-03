@@ -18,11 +18,12 @@ public class MultiConstKnapsack {
     public static void main(String[] args) throws IOException {
         int totalValue = 0;
 
-        TakeUserInput();                            //Take input
-        readFile(inputText);                        //Read file
+        // If we want, we can take inputs with this method.
+        // TakeUserInput();                            //Take input
+        readFile(args[0]);                        //Read file
         Arrays.sort(items);                         //Sort by each average ratio.
         totalValue = fillKnapsack();                //Fill the hypothetical knapsack.
-        writeFile(outputText , totalValue);         //Write to an output file.
+        writeFile(args[1] , totalValue);         //Write to an output file.
 
     }
 
